@@ -1,21 +1,16 @@
-import io.github.kvxd.unsafeKt.api.HierarchyStructure
-import io.github.kvxd.unsafeKt.api.globalScope
-import io.github.kvxd.unsafeKt.api.int32
-import io.github.kvxd.unsafeKt.proc.findProcessIdByExecutable
-import io.github.kvxd.unsafeKt.api.unsafe
-import io.github.kvxd.unsafeKt.memory.Address
-import platform.posix.waitpid
+import io.github.kvxd.unsafeKt.proc.Process
+import io.github.kvxd.unsafeKt.proc.attach
+import io.github.kvxd.unsafeKt.unsafeKtCatching
 
-var money by 0x14562eb8L.int32()
+fun main() = unsafeKtCatching {
+    attach(Process.byId(10089) ?: error("Process not found"))
+    println("Found process: ${targetProcess!!.pid}")
 
-fun main() {
-    unsafe(18483) {
-        memory {
-            useUnixProvider()
-        }
+    val bytes = memoryBackend.read(0x62f4394ee074, 32)
+    val intValue = bytes[0].toInt() and 0xFF or
+            (bytes[1].toInt() and 0xFF shl 8) or
+            (bytes[2].toInt() and 0xFF shl 16) or
+            (bytes[3].toInt() and 0xFF shl 24)
 
-        println(money)
-        money = 69
-        println(money)
-    }
+    println("Integer value: $intValue")
 }
