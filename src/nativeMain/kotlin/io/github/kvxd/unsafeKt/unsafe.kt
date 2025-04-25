@@ -9,7 +9,7 @@ fun unsafeKt(scope: UnsafeScope.() -> Unit) {
 
     unsafeScope.scope()
 
-    unsafeScope.memoryBackend.detach()
+    unsafeScope.mem.detach()
 }
 
 @UnsafeKtDSL
@@ -24,6 +24,6 @@ fun unsafeKtCatching(scope: UnsafeScope.() -> Unit) {
 class UnsafeScope {
 
     var targetProcess: Process? = null
-    internal lateinit var memoryBackend: MemoryBackend
+    internal lateinit var mem: MemoryBackend
 
 }
